@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Estadio Simulado</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .stadium {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    .zone {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .zone h3 {
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+    .seats {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .seat-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .vip .seat-btn {
+      background-color: #ecca07;
+      border: none;
+      color: #212529;
+    }
+    .tribuna .seat-btn {
+      background-color: #2e5897;
+      border: none;
+      color: white;
+    }
+    .general .seat-btn {
+      background-color: #656967;
+      border: none;
+      color: white;
+    }
+    .seat-btn:hover {
+      filter: brightness(110%);
+      cursor: pointer;
+    }
+    .seat-btn.seleccionado {
+      outline: 2px solid black;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand">BoletoSys</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="#">Inicio</a>
+        <a class="nav-item nav-link" href="#" id="btnCompra" role="button">Registro</a>
+        <a class="nav-item nav-link" href="#">Compra</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="stadium">
+    <div class="zone vip">
+      <h3>Zona VIP (Q 150.00)</h3>
+      <div class="seats">
+        <!-- Asientos VIP -->
+        <button class="seat-btn btn">1</button>
+        <button class="seat-btn btn">2</button>
+        <button class="seat-btn btn">3</button>
+        <button class="seat-btn btn">4</button>
+        <button class="seat-btn btn">5</button>
+        <button class="seat-btn btn">6</button>
+        <button class="seat-btn btn">7</button>
+        <button class="seat-btn btn">8</button>
+        <button class="seat-btn btn">9</button>
+        <button class="seat-btn btn">10</button>
+        <button class="seat-btn btn">11</button>
+        <button class="seat-btn btn">12</button>
+        <button class="seat-btn btn">13</button>
+        <button class="seat-btn btn">14</button>
+        <button class="seat-btn btn">15</button>
+      </div>
+    </div>
+
+    <div class="zone tribuna">
+      <h3>Zona TRIBUNA (Q 100.00)</h3>
+      <div class="seats">
+        <!-- Asientos Tribuna -->
+        <button class="seat-btn btn">1</button>
+        <button class="seat-btn btn">2</button>
+        <button class="seat-btn btn">3</button>
+        <button class="seat-btn btn">4</button>
+        <button class="seat-btn btn">5</button>
+        <button class="seat-btn btn">6</button>
+        <button class="seat-btn btn">7</button>
+        <button class="seat-btn btn">8</button>
+        <button class="seat-btn btn">9</button>
+        <button class="seat-btn btn">10</button>
+        <button class="seat-btn btn">11</button>
+        <button class="seat-btn btn">12</button>
+        <button class="seat-btn btn">13</button>
+        <button class="seat-btn btn">14</button>
+        <button class="seat-btn btn">15</button>
+        <button class="seat-btn btn">16</button>
+        <button class="seat-btn btn">17</button>
+        <button class="seat-btn btn">18</button>
+        <button class="seat-btn btn">19</button>
+        <button class="seat-btn btn">20</button>
+      </div>
+    </div>
+
+    <div class="zone general">
+      <h3>Zona GENERAL (Q 50.00)</h3>
+      <div class="seats">
+        <!-- Asientos General -->
+        <button class="seat-btn btn">1</button>
+        <button class="seat-btn btn">2</button>
+        <button class="seat-btn btn">3</button>
+        <button class="seat-btn btn">4</button>
+        <button class="seat-btn btn">5</button>
+        <button class="seat-btn btn">6</button>
+        <button class="seat-btn btn">7</button>
+        <button class="seat-btn btn">8</button>
+        <button class="seat-btn btn">9</button>
+        <button class="seat-btn btn">10</button>
+        <button class="seat-btn btn">11</button>
+        <button class="seat-btn btn">12</button>
+        <button class="seat-btn btn">13</button>
+        <button class="seat-btn btn">14</button>
+        <button class="seat-btn btn">15</button>
+        <button class="seat-btn btn">16</button>
+        <button class="seat-btn btn">17</button>
+        <button class="seat-btn btn">18</button>
+        <button class="seat-btn btn">19</button>
+        <button class="seat-btn btn">21</button>
+        <button class="seat-btn btn">22</button>
+        <button class="seat-btn btn">23</button>
+        <button class="seat-btn btn">24</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <h5>Boletos seleccionados: <span id="contador-boletos">0</span></h5>
+    <h5>Total: $<span id="total-boletos">0</span></h5>
+  </div>
+
+<!-- Modal de Registro y Resumen -->
+<div class="modal fade" id="compraModal" tabindex="-1" aria-labelledby="compraModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content border-success">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="compraModalLabel">Registro y Resumen de Compra</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <form id="formCliente">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre completo</label>
+            <input type="text" class="form-control" id="nombre" required />
+          </div>
+          <div class="mb-3">
+            <label for="correo" class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control" id="correo" required />
+          </div>
+          <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="tel" class="form-control" id="telefono" required />
+          </div>
+
+          <hr />
+          <h6>Asientos seleccionados:</h6>
+          <ul id="resumenAsientos" class="list-group mb-3"></ul>
+          <p><strong>Total:</strong> $<span id="resumenTotal">0</span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Confirmar Registro</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- Tu JS -->
+  <script src="./js/main.js"></script>
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
