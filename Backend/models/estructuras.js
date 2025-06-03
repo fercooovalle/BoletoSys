@@ -1,16 +1,15 @@
 let contadorBoleto = 1;
 
 class Boleto {
-    constructor(nombreComprador, zona, asiento) {
-        this.numero = contadorBoleto++;
-        this.nombre = nombreComprador;
-        this.zona = zona;
-        this.asiento = asiento;
-        this.fechaHora = new Date().toLocaleString();
-        this.qrPath = ''; 
-    }
+  constructor(nombre, zona, asiento) {
+    this.nombre = nombre;
+    this.zona = zona;
+    this.asiento = asiento; 
+    this.fechaHora = new Date().toLocaleString();
+    this.numero = null;
+    this.qrPath = '';
+  }
 }
-
 class NodoZona {
     constructor(nombre, capacidad) {
         this.nombre = nombre;
@@ -38,13 +37,17 @@ class ListaZonas {
     }
 
     encontrarZona(nombre) {
-        let actual = this.primero;
-        while (actual) {
-            if (actual.nombre === nombre) return actual;
-            actual = actual.siguiente;
-        }
-        return null;
+  let actual = this.primero;
+  const buscado = nombre.toLowerCase(); 
+  while (actual) {
+    if (actual.nombre.toLowerCase() === buscado) {
+      return actual;
     }
+    actual = actual.siguiente;
+  }
+  return null;
+}
+
 }
 
 class Cola {

@@ -6,8 +6,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
-app.use('/backend/qrs', express.static(path.join(__dirname, 'qrs')));
-
+app.use('/qrs', express.static(path.join(__dirname, 'public', 'qrs')));
 
 app.use('/api', compraRoutes);
 
