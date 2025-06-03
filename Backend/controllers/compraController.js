@@ -26,7 +26,6 @@ if (!fs.existsSync(archivoTransacciones)) {
 }
 
 
-// 🟢 POST /comprar
 const comprarBoleto = async (req, res) => {
     try {
         const { nombre, zona, asiento } = req.body;
@@ -100,7 +99,7 @@ const cancelarBoleto = (req, res) => {
             return res.status(404).json({ error: 'Boleto no encontrado.' });
         }
 
-        const boletoCancelado = transacciones.splice(index, 1)[0]; // eliminar y obtener
+        const boletoCancelado = transacciones.splice(index, 1)[0]; 
 
         // Liberar asiento
         const zona = zonas.encontrarZona(boletoCancelado.zona);
