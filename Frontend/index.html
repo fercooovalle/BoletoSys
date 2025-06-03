@@ -3,207 +3,378 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Estadio Simulado</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>BoletoSys</title>
+
+  <!-- ===== Bootstrap CSS (CDN) ===== -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- ===== Google Fonts: Poppins ===== -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
+    rel="stylesheet"
+  />
+
   <style>
-    .stadium {
-      max-width: 600px;
-      margin: 30px auto;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 12px;
-      box-shadow: 0 0 10px #ccc;
+    /* ======== RESET/BASE ======== */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
     }
-    .zone {
-      margin-bottom: 40px;
-      text-align: center;
+    .navbar {
+      background-color: #111;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
-    .zone h3 {
-      margin-bottom: 15px;
-      font-weight: 700;
+    .navbar-brand {
+      color: #f1c40f;
+      font-weight: bold;
     }
-    .seats {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      max-width: 400px;
-      margin: 0 auto;
+    .navbar-brand:hover {
+      color: #f39c12;
     }
-    .seat-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 6px;
+    .btn-zone {
+      min-width: 80px;
+      font-weight: 500;
+    }
+
+    /* ======== CONTENEDOR PRINCIPAL ======== */
+    .container-stadium {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-top: 1.5rem;
+    }
+    h2.page-title {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
       font-weight: 600;
     }
-    .vip .seat-btn {
-      background-color: #ecca07;
-      border: none;
-      color: #212529;
+
+    /* ======== ZONA / ASIENTOS ======== */
+    .zone-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
     }
-    .tribuna .seat-btn {
-      background-color: #2e5897;
-      border: none;
-      color: white;
+    .seat-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
     }
-    .general .seat-btn {
-      background-color: #656967;
-      border: none;
-      color: white;
+    .seat-btn {
+      width: 42px;
+      height: 42px;
+      margin: 0.3rem;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease-in-out;
+      background-color: transparent;
     }
     .seat-btn:hover {
-      filter: brightness(110%);
+      transform: scale(1.08);
       cursor: pointer;
     }
+    /* Estilos por zona (solo borde y color de texto) */
+    .vip .seat-btn {
+      border: 2px solid #f1c40f;
+      color: #f1c40f;
+    }
+    .tribuna .seat-btn {
+      border: 2px solid #3498db;
+      color: #3498db;
+    }
+    .general .seat-btn {
+      border: 2px solid #27ae60;
+      color: #27ae60;
+    }
+    /* Botón “seleccionado” */
     .seat-btn.seleccionado {
-      outline: 2px solid black;
+      background-color: #111 !important;
+      color: #fff !important;
+      transform: scale(1.1);
+    }
+    /* Botón deshabilitado (boleto comprado) */
+    .seat-btn[disabled] {
+      background-color: #ccc !important;
+      color: #666 !important;
+      border-color: #999 !important;
+      cursor: not-allowed;
+    }
+
+    /* ======== RESUMEN + BOTÓN CONFIRMAR ======== */
+    .summary {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .btn-confirm {
+      background-color: #111;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      transition: background-color 0.2s;
+    }
+    .btn-confirm:hover {
+      background-color: #333;
+    }
+
+    /* ======== MODALES ======== */
+    .modal-header {
+      background-color: #111;
+      color: white;
+    }
+    .btn-danger {
+      background-color: #c0392b;
+      border: none;
+    }
+    .btn-danger:hover {
+      background-color: #a83225;
+    }
+    .qr-img {
+      max-width: 150px;
+      margin: 0.5rem;
     }
   </style>
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand">BoletoSys</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link active" href="#">Inicio</a>
-        <a class="nav-item nav-link" href="#" id="btnCompra" role="button">Registro</a>
-        <a class="nav-item nav-link" href="#">Compra</a>
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">🎫 BoletoSys</a>
+      <div class="ms-auto d-flex gap-2">
+        <button
+          class="btn btn-outline-warning btn-zone"
+          onclick="mostrarZona('vip')"
+        >
+          VIP
+        </button>
+        <button
+          class="btn btn-outline-primary btn-zone"
+          onclick="mostrarZona('tribuna')"
+        >
+          Tribuna
+        </button>
+        <button
+          class="btn btn-outline-success btn-zone"
+          onclick="mostrarZona('general')"
+        >
+          General
+        </button>
       </div>
     </div>
   </nav>
 
-  <div class="stadium">
-    <div class="zone vip">
-      <h3>Zona VIP (Q 150.00)</h3>
-      <div class="seats">
-        <!-- Asientos VIP -->
-        <button class="seat-btn btn">1</button>
-        <button class="seat-btn btn">2</button>
-        <button class="seat-btn btn">3</button>
-        <button class="seat-btn btn">4</button>
-        <button class="seat-btn btn">5</button>
-        <button class="seat-btn btn">6</button>
-        <button class="seat-btn btn">7</button>
-        <button class="seat-btn btn">8</button>
-        <button class="seat-btn btn">9</button>
-        <button class="seat-btn btn">10</button>
-        <button class="seat-btn btn">11</button>
-        <button class="seat-btn btn">12</button>
-        <button class="seat-btn btn">13</button>
-        <button class="seat-btn btn">14</button>
-        <button class="seat-btn btn">15</button>
+  <!-- ===== CONTENIDO PRINCIPAL ===== -->
+  <main class="container mb-5">
+    <div class="container-stadium">
+      <h2 class="page-title text-center">Selecciona tus asientos</h2>
+
+      <!-- ───── ZONA VIP ───── -->
+      <div id="vip" class="zone mb-4 vip">
+        <h4 class="zone-title text-warning">Zona VIP Q150</h4>
+        <div class="seat-row vip">
+          <button class="btn seat-btn">1</button>
+          <button class="btn seat-btn">2</button>
+          <button class="btn seat-btn">3</button>
+          <button class="btn seat-btn">4</button>
+          <button class="btn seat-btn">5</button>
+        </div>
+        <div class="seat-row vip">
+          <button class="btn seat-btn">6</button>
+          <button class="btn seat-btn">7</button>
+          <button class="btn seat-btn">8</button>
+          <button class="btn seat-btn">9</button>
+          <button class="btn seat-btn">10</button>
+        </div>
+        <div class="seat-row vip">
+          <button class="btn seat-btn">11</button>
+          <button class="btn seat-btn">12</button>
+          <button class="btn seat-btn">13</button>
+          <button class="btn seat-btn">14</button>
+          <button class="btn seat-btn">15</button>
+        </div>
+        <div class="seat-row vip">
+          <button class="btn seat-btn">16</button>
+          <button class="btn seat-btn">17</button>
+          <button class="btn seat-btn">18</button>
+          <button class="btn seat-btn">19</button>
+          <button class="btn seat-btn">20</button>
+        </div>
+      </div>
+
+      <!-- ───── ZONA TRIBUNA ───── -->
+      <div
+        id="tribuna"
+        class="zone mb-4 tribuna"
+        style="display: none;"
+      >
+        <h4 class="zone-title text-primary">Tribuna Q100</h4>
+        <div class="seat-row tribuna">
+          <button class="btn seat-btn">1</button>
+          <button class="btn seat-btn">2</button>
+          <button class="btn seat-btn">3</button>
+          <button class="btn seat-btn">4</button>
+          <button class="btn seat-btn">5</button>
+        </div>
+        <div class="seat-row tribuna">
+          <button class="btn seat-btn">6</button>
+          <button class="btn seat-btn">7</button>
+          <button class="btn seat-btn">8</button>
+          <button class="btn seat-btn">9</button>
+          <button class="btn seat-btn">10</button>
+        </div>
+        <div class="seat-row tribuna">
+          <button class="btn seat-btn">11</button>
+          <button class="btn seat-btn">12</button>
+          <button class="btn seat-btn">13</button>
+          <button class="btn seat-btn">14</button>
+          <button class="btn seat-btn">15</button>
+        </div>
+        <div class="seat-row tribuna">
+          <button class="btn seat-btn">16</button>
+          <button class="btn seat-btn">17</button>
+          <button class="btn seat-btn">18</button>
+          <button class="btn seat-btn">19</button>
+          <button class="btn seat-btn">20</button>
+        </div>
+      </div>
+
+      <!-- ───── ZONA GENERAL ───── -->
+      <div
+        id="general"
+        class="zone mb-4 general"
+        style="display: none;"
+      >
+        <h4 class="zone-title text-success">General Q50</h4>
+        <div class="seat-row general">
+          <button class="btn seat-btn">1</button>
+          <button class="btn seat-btn">2</button>
+          <button class="btn seat-btn">3</button>
+          <button class="btn seat-btn">4</button>
+          <button class="btn seat-btn">5</button>
+        </div>
+        <div class="seat-row general">
+          <button class="btn seat-btn">6</button>
+          <button class="btn seat-btn">7</button>
+          <button class="btn seat-btn">8</button>
+          <button class="btn seat-btn">9</button>
+          <button class="btn seat-btn">10</button>
+        </div>
+        <div class="seat-row general">
+          <button class="btn seat-btn">11</button>
+          <button class="btn seat-btn">12</button>
+          <button class="btn seat-btn">13</button>
+          <button class="btn seat-btn">14</button>
+          <button class="btn seat-btn">15</button>
+        </div>
+        <div class="seat-row general">
+          <button class="btn seat-btn">16</button>
+          <button class="btn seat-btn">17</button>
+          <button class="btn seat-btn">18</button>
+          <button class="btn seat-btn">19</button>
+          <button class="btn seat-btn">20</button>
+        </div>
+      </div>
+
+      <!-- ───── RESUMEN + BOTÓN “CONFIRMAR COMPRA” ───── -->
+      <div class="summary">
+        <p>Boletos seleccionados: <strong id="contador-boletos">0</strong></p>
+        <p>Total: Q<strong id="total-boletos">0</strong></p>
+        <button id="btnCompra" class="btn btn-confirm">Confirmar Compra</button>
       </div>
     </div>
+  </main>
 
-    <div class="zone tribuna">
-      <h3>Zona TRIBUNA (Q 100.00)</h3>
-      <div class="seats">
-        <!-- Asientos Tribuna -->
-        <button class="seat-btn btn">1</button>
-        <button class="seat-btn btn">2</button>
-        <button class="seat-btn btn">3</button>
-        <button class="seat-btn btn">4</button>
-        <button class="seat-btn btn">5</button>
-        <button class="seat-btn btn">6</button>
-        <button class="seat-btn btn">7</button>
-        <button class="seat-btn btn">8</button>
-        <button class="seat-btn btn">9</button>
-        <button class="seat-btn btn">10</button>
-        <button class="seat-btn btn">11</button>
-        <button class="seat-btn btn">12</button>
-        <button class="seat-btn btn">13</button>
-        <button class="seat-btn btn">14</button>
-        <button class="seat-btn btn">15</button>
-        <button class="seat-btn btn">16</button>
-        <button class="seat-btn btn">17</button>
-        <button class="seat-btn btn">18</button>
-        <button class="seat-btn btn">19</button>
-        <button class="seat-btn btn">20</button>
-      </div>
-    </div>
-
-    <div class="zone general">
-      <h3>Zona GENERAL (Q 50.00)</h3>
-      <div class="seats">
-        <!-- Asientos General -->
-        <button class="seat-btn btn">1</button>
-        <button class="seat-btn btn">2</button>
-        <button class="seat-btn btn">3</button>
-        <button class="seat-btn btn">4</button>
-        <button class="seat-btn btn">5</button>
-        <button class="seat-btn btn">6</button>
-        <button class="seat-btn btn">7</button>
-        <button class="seat-btn btn">8</button>
-        <button class="seat-btn btn">9</button>
-        <button class="seat-btn btn">10</button>
-        <button class="seat-btn btn">11</button>
-        <button class="seat-btn btn">12</button>
-        <button class="seat-btn btn">13</button>
-        <button class="seat-btn btn">14</button>
-        <button class="seat-btn btn">15</button>
-        <button class="seat-btn btn">16</button>
-        <button class="seat-btn btn">17</button>
-        <button class="seat-btn btn">18</button>
-        <button class="seat-btn btn">19</button>
-        <button class="seat-btn btn">21</button>
-        <button class="seat-btn btn">22</button>
-        <button class="seat-btn btn">23</button>
-        <button class="seat-btn btn">24</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="text-center mt-4">
-    <h5>Boletos seleccionados: <span id="contador-boletos">0</span></h5>
-    <h5>Total: $<span id="total-boletos">0</span></h5>
-  </div>
-
-<!-- Modal de Registro y Resumen -->
-<div class="modal fade" id="compraModal" tabindex="-1" aria-labelledby="compraModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content border-success">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title" id="compraModalLabel">Registro y Resumen de Compra</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <form id="formCliente">
+  <!-- ───── MODAL “Confirma tu Compra” ───── -->
+  <div class="modal fade" id="compraModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirma tu Compra</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Cerrar"
+          ></button>
+        </div>
         <div class="modal-body">
-          <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre completo</label>
-            <input type="text" class="form-control" id="nombre" required />
-          </div>
-          <div class="mb-3">
-            <label for="correo" class="form-label">Correo electrónico</label>
-            <input type="email" class="form-control" id="correo" required />
-          </div>
-          <div class="mb-3">
-            <label for="telefono" class="form-label">Teléfono</label>
-            <input type="tel" class="form-control" id="telefono" required />
-          </div>
-
-          <hr />
-          <h6>Asientos seleccionados:</h6>
           <ul id="resumenAsientos" class="list-group mb-3"></ul>
-          <p><strong>Total:</strong> $<span id="resumenTotal">0</span></p>
+          <p>Total: Q<strong id="resumenTotal">0</strong></p>
+          <form id="formCliente">
+            <input
+              type="text"
+              id="nombre"
+              class="form-control mb-2"
+              placeholder="Nombre completo"
+              required
+            />
+            <input
+              type="email"
+              id="correo"
+              class="form-control mb-2"
+              placeholder="Correo electrónico"
+              required
+            />
+            <input
+              type="tel"
+              id="telefono"
+              class="form-control mb-2"
+              placeholder="Teléfono"
+              required
+            />
+            <button type="submit" class="btn btn-success w-100">Finalizar</button>
+          </form>
         </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Confirmar Registro</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
-</div>
 
+  <!-- ───── MODAL “Resumen de la Compra” ───── -->
+  <div class="modal fade" id="resumenModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Resumen de la Compra</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Cerrar"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Nombre:</strong> <span id="resumenNombre"></span></p>
+          <p><strong>Correo:</strong> <span id="resumenCorreo"></span></p>
+          <p><strong>Teléfono:</strong> <span id="resumenTelefono"></span></p>
+          <ul id="resumenAsientosFinal" class="list-group mb-3"></ul>
+          <p>Total: Q<strong id="resumenTotalFinal">0</strong></p>
+          <!-- Contenedor de QRs -->
+          <div class="text-center">
+            <div id="qrContainer" class="d-flex flex-wrap justify-content-center"></div>
+          </div>
+          <button id="btnCancelar" class="btn btn-danger w-100 mt-3">
+            Cancelar Compra
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- ===== Bootstrap JS Bundle (Popper + Bootstrap) ===== -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  ></script>
 
-  <!-- Tu JS -->
-  <script src="./js/main.js"></script>
-  <!-- Bootstrap Bundle JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- ===== Tu archivo main.js (solo uno) ===== -->
+  <script src="js/main.js"></script>
 </body>
 </html>

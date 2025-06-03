@@ -1,22 +1,23 @@
 const express = require('express');
 const path = require('path');
+const compraRoutes = require('./routes/compraRoutes');
 
 const app = express();
 const PORT = 3000;
 
-// Ruta a la carpeta frontend 
-const frontendPath = path.join(__dirname, '../frontend');
+app.use(express.json());
+app.use('/backend/qrs', express.static(path.join(__dirname, 'qrs')));
 
-// Servir archivos estáticos (HTML, CSS, JS)
+
+app.use('/api', compraRoutes);
+
+const frontendPath = path.join(__dirname, '../frontend');
 app.use(express.static(frontendPath));
 
-// Ruta principal para servir index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-// Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en http://localhost:${PORT}`);
 });
-
