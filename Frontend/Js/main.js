@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnCancelar = document.getElementById("btnCancelar");
 
   let boletosSeleccionados = 0;
-  const selectedSeats = [];      
-  let ultimosBoletos = [];       
-  let ultimoBoletoNumero = [];   
+  const selectedSeats = [];
+  let ultimosBoletos = [];
+  let ultimoBoletoNumero = [];
 
   const precios = {
     VIP: 150,
@@ -17,19 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
     GENERAL: 50
   };
 
-
-
   window.mostrarZona = function (zonaId) {
-    document.querySelectorAll(".zone").forEach((z) => {
-      z.style.display = "none";
-    });
-
+    document.querySelectorAll(".zone").forEach((z) => z.style.display = "none");
     const zona = document.getElementById(zonaId);
     if (zona) zona.style.display = "block";
 
     selectedSeats.forEach((asiento) => {
-      const zonaLower = zonaId.toLowerCase();
-      if (asiento.zona.toLowerCase() === zonaLower) {
+      if (asiento.zona.toLowerCase() === zonaId.toLowerCase()) {
         zona.querySelectorAll(".seat-btn").forEach((btn) => {
           if (btn.textContent.trim() === asiento.numero) {
             btn.classList.add("seleccionado");
@@ -42,15 +36,13 @@ document.addEventListener("DOMContentLoaded", () => {
   botonesAsiento.forEach((boton) => {
     boton.addEventListener("click", () => {
       const zonaDiv = boton.closest(".zone");
-      let zonaNombre = "";
-      if (zonaDiv.classList.contains("vip")) zonaNombre = "VIP";
-      else if (zonaDiv.classList.contains("tribuna")) zonaNombre = "TRIBUNA";
-      else if (zonaDiv.classList.contains("general")) zonaNombre = "GENERAL";
+      let zonaNombre = zonaDiv.classList.contains("vip") ? "VIP" :
+                       zonaDiv.classList.contains("tribuna") ? "TRIBUNA" : "GENERAL";
 
       const numeroAsiento = boton.textContent.trim();
       const asientoId = `${zonaNombre}-${numeroAsiento}`;
-
       const idx = selectedSeats.findIndex((a) => a.id === asientoId);
+
       if (idx !== -1) {
         selectedSeats.splice(idx, 1);
         boletosSeleccionados--;
@@ -67,8 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       contadorBoletos.textContent = boletosSeleccionados;
-      const suma = selectedSeats.reduce((acc, s) => acc + s.precio, 0);
-      totalBoletos.textContent = suma;
+      totalBoletos.textContent = selectedSeats.reduce((acc, s) => acc + s.precio, 0);
     });
   });
 
@@ -81,8 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const listaAsientos = document.getElementById("resumenAsientos");
     const totalResumen = document.getElementById("resumenTotal");
     listaAsientos.innerHTML = "";
-    let suma = 0;
 
+    let suma = 0;
     selectedSeats.forEach((s) => {
       const li = document.createElement("li");
       li.className = "list-group-item";
@@ -92,9 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     totalResumen.textContent = suma;
 
-    const compraModal = new bootstrap.Modal(
-      document.getElementById("compraModal")
-    );
+    const compraModal = new bootstrap.Modal(document.getElementById("compraModal"));
     compraModal.show();
   });
 
@@ -130,16 +119,11 @@ document.addEventListener("DOMContentLoaded", () => {
           ultimosBoletos.push(resultado.boleto);
           ultimoBoletoNumero.push(resultado.boleto.numero);
 
-          // Deshabilitar el botón de ese asiento comprado
           const btn = Array.from(botonesAsiento).find((b) => {
             const zDiv = b.closest(".zone");
-            let zN = "";
-            if (zDiv.classList.contains("vip")) zN = "VIP";
-            else if (zDiv.classList.contains("tribuna")) zN = "TRIBUNA";
-            else if (zDiv.classList.contains("general")) zN = "GENERAL";
-            return (
-              zN === asiento.zona && b.textContent.trim() === asiento.numero
-            );
+            let zN = zDiv.classList.contains("vip") ? "VIP" :
+                     zDiv.classList.contains("tribuna") ? "TRIBUNA" : "GENERAL";
+            return zN === asiento.zona && b.textContent.trim() === asiento.numero;
           });
           if (btn) {
             btn.disabled = true;
@@ -172,21 +156,15 @@ document.addEventListener("DOMContentLoaded", () => {
     ultimosBoletos.forEach((boleto) => {
       if (boleto.qrPath) {
         const img = document.createElement("img");
-        img.src = boleto.qrPath; 
+        img.src = boleto.qrPath;
         img.alt = "QR";
         img.classList.add("qr-img");
         qrContainer.appendChild(img);
       }
     });
 
-    bootstrap.Modal.getInstance(
-      document.getElementById("compraModal")
-    ).hide();
-    const resumenModal = new bootstrap.Modal(
-      document.getElementById("resumenModal")
-    );
-    resumenModal.show();
-
+    bootstrap.Modal.getInstance(document.getElementById("compraModal")).hide();
+    new bootstrap.Modal(document.getElementById("resumenModal")).show();
     resetSeleccion();
   });
 
@@ -195,11 +173,11 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("No hay boletos para cancelar.");
       return;
     }
+
     const confirmar = confirm("¿Confirmas cancelar TODOS los boletos comprados?");
     if (!confirmar) return;
 
     try {
-      // Enviar cancelación de cada boleto al backend
       for (const numero of ultimoBoletoNumero) {
         await fetch("http://localhost:3000/api/cancelar", {
           method: "POST",
@@ -207,32 +185,27 @@ document.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify({ numero })
         });
       }
-      alert("compra cancelada correctamente.");
 
-      // Habilitar los botones de los asientos cancelados
-ultimoBoletoNumero.forEach((nro) => {
-  const boleto = ultimosBoletos.find((b) => b.numero === nro);
-  if (boleto) {
-    const zonaClase = boleto.zona.toLowerCase();
-    const zonaDiv = document.querySelector(`.zone.${zonaClase}`);
-    if (zonaDiv) {
-      const btn = Array.from(zonaDiv.querySelectorAll(".seat-btn")).find(
-        (b) => b.textContent.trim() === String(boleto.asiento)
-      );
-      if (btn) {
-        btn.disabled = false;
-        btn.classList.remove("seleccionado", "btn-secondary");
-      }
-    }
-  }
-});
+      alert("Compra cancelada correctamente.");
 
-      // Cerrar el modal “Resumen de la Compra”
-      bootstrap.Modal.getInstance(
-        document.getElementById("resumenModal")
-      ).hide();
+      ultimoBoletoNumero.forEach((nro) => {
+        const boleto = ultimosBoletos.find((b) => b.numero === nro);
+        if (boleto) {
+          const zonaClase = boleto.zona.toLowerCase();
+          const zonaDiv = document.querySelector(`.zone.${zonaClase}`);
+          if (zonaDiv) {
+            const btn = Array.from(zonaDiv.querySelectorAll(".seat-btn")).find(
+              (b) => b.textContent.trim() === String(boleto.asiento)
+            );
+            if (btn) {
+              btn.disabled = false;
+              btn.classList.remove("seleccionado", "btn-secondary");
+            }
+          }
+        }
+      });
 
-      // Limpiar selección visual y arrays
+      bootstrap.Modal.getInstance(document.getElementById("resumenModal")).hide();
       resetSeleccion();
       ultimosBoletos = [];
       ultimoBoletoNumero = [];
@@ -249,6 +222,6 @@ ultimoBoletoNumero.forEach((nro) => {
     totalBoletos.textContent = "0";
     botonesAsiento.forEach((b) => b.classList.remove("seleccionado"));
   }
-    mostrarZona("vip");
 
+  mostrarZona("vip");
 });
