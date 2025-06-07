@@ -5,7 +5,7 @@ const { comprarBoleto, cancelarBoleto, reasignarBoleto, obtenerBoletos } = requi
 router.post('/comprar', comprarBoleto);
 router.post('/cancelar', cancelarBoleto);
 router.post('/reasignar', reasignarBoleto);
-router.get('/', obtenerBoletos);
+router.get('/boletos', obtenerBoletos);
 
 
 module.exports = router;

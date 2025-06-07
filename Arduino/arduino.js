@@ -1,19 +1,16 @@
-// arduino/serial.js
-const SerialPort = require('serialport');
-const Readline = require('@serialport/parser-readline');
+const { SerialPort } = require('serialport');
+const { ReadlineParser } = require('@serialport/parser-readline');
 
 module.exports = function(io) {
-  // siempre en COM3 
   const port = new SerialPort({ path: 'COM3', baudRate: 9600 });
 
-  const parser = port.pipe(new Readline({ delimiter: '\n' }));
+  const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
+
 
   parser.on('data', (data) => {
-    const command = data.trim(); // Ej: 'LEFT', 'RIGHT', 'ENTER', etc.
+    const command = data.trim();
     console.log('Comando recibido de Arduino:', command);
-
-    // Emitimos el comando al frontend usando socket.io
-    io.emit('arduino-command', command);
+     io.emit("mover", { button: data.trim() });
   });
 
   port.on('open', () => {

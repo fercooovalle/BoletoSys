@@ -2,24 +2,24 @@ const QRCode = require('qrcode');
 const path = require('path');
 const fs = require('fs');
 
-// Asegura que exista la carpeta de salida
-const carpetaQR = path.join(__dirname, '..', 'public', 'qrs');
-if (!fs.existsSync(carpetaQR)) {
-  fs.mkdirSync(carpetaQR, { recursive: true });
-}
-
 const generarQR = async (boleto) => {
-  const contenido = `Boleto No. ${boleto.numero}
-Nombre: ${boleto.nombre}
-Zona: ${boleto.zona}
-Asiento: ${boleto.asiento}
-Fecha: ${boleto.fechaHora}`;
+    const contenido = `Boleto No. ${boleto.numero}\nNombre: ${boleto.nombre}\nZona: ${boleto.zona}\nAsiento: ${boleto.asiento}`;
+    const nombreArchivo = `qr_boleto_${boleto.numero}.png`;
+    const rutaCarpeta = path.join(__dirname, '..', 'qrs');
 
-  const nombreArchivo = `qr-${boleto.numero}-${Date.now()}.png`;
-  const rutaCompleta = path.join(carpetaQR, nombreArchivo);
+    if (!fs.existsSync(rutaCarpeta)) {
+        fs.mkdirSync(rutaCarpeta);
+    }
 
-  await QRCode.toFile(rutaCompleta, contenido);
-  return `/qrs/${nombreArchivo}`;
+    const rutaCompleta = path.join(rutaCarpeta, nombreArchivo);
+
+    try {
+        await QRCode.toFile(rutaCompleta, contenido);
+        return `/backend/qrs/${nombreArchivo}`;
+    } catch (err) {
+        console.error('Error al generar QR:', err);
+        return null;
+    }
 };
 
 module.exports = { generarQR };

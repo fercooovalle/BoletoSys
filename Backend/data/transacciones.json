@@ -1,1 +1,58 @@
-[]
+[
+  {
+    "numero": 1,
+    "nombre": "fernando",
+    "zona": "VIP",
+    "asiento": 1,
+    "fechaHora": "3/6/2025, 11:02:05 a. m.",
+    "qrPath": "/backend/qrs/qr_boleto_1.png"
+  },
+  {
+    "numero": 2,
+    "nombre": "fernando",
+    "zona": "VIP",
+    "asiento": 9,
+    "fechaHora": "3/6/2025, 11:02:06 a. m.",
+    "qrPath": "/backend/qrs/qr_boleto_2.png"
+  },
+  {
+    "numero": 3,
+    "nombre": "Arturo",
+    "zona": "VIP",
+    "asiento": 1,
+    "fechaHora": "3/6/2025, 1:48:28 p. m.",
+    "qrPath": "/backend/qrs/qr_boleto_3.png"
+  },
+  {
+    "numero": 4,
+    "nombre": "Arturo",
+    "zona": "VIP",
+    "asiento": 2,
+    "fechaHora": "3/6/2025, 1:48:28 p. m.",
+    "qrPath": "/backend/qrs/qr_boleto_4.png"
+  },
+  {
+    "numero": 5,
+    "nombre": "fernando",
+    "zona": "VIP",
+    "asiento": 2,
+    "fechaHora": "3/6/2025, 2:50:52 p. m.",
+    "qrPath": "/backend/qrs/qr_boleto_5.png"
+  },
+  {
+    "numero": 6,
+    "nombre": "fernando",
+    "zona": "VIP",
+    "asiento": 3,
+    "fechaHora": "3/6/2025, 2:50:52 p. m.",
+    "qrPath": "/backend/qrs/qr_boleto_6.png"
+  },
+  {
+    "numero": 7,
+    "nombre": "fernando",
+    "zona": "VIP",
+    "asiento": 4,
+    "fechaHora": "3/6/2025, 2:51:08 p. m.",
+    "qrPath": "/backend/qrs/qr_boleto_7.png"
+  }
+]
